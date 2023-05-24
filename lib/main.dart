@@ -8,6 +8,9 @@ import 'categorypage.dart';
 import 'registerpage.dart';
 import 'FeedPage.dart';
 import 'PostPage.dart';
+import 'searchPage.dart';
+import 'userPage.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -19,22 +22,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-providers:[
-  ChangeNotifierProvider( create: (ctx) => AuthProvider()),
-],
-
-   child: MaterialApp(
-      title: 'Taswiha Tours',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
-      routes: {'categoryroute': (dummyCtx)=>CategoryGrid(),
-      'registrationroute':(dummyCtx)=>RegistrationPage(),
-      'MainMenu': (dummyCtx) => FeedPage(),
-       '/postplace':(dummyCtx)=>PostPage()
-      },
-    ));
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => AuthProvider()),
+        ],
+        child: MaterialApp(
+          title: 'Taswiha Tours',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: LoginPage(),
+          routes: {
+            'categoryroute': (dummyCtx) => CategoryGrid(),
+            'registrationroute': (dummyCtx) => RegistrationPage(),
+            'MainMenu': (dummyCtx) => FeedPage(),
+            'searchroute': (dummyCtx) => SearchPage(),
+            'userRoute': (dummyCtx) => UserPage(),
+            '/postplace': (dummyCtx) => PostPage()
+          },
+        ));
   }
 }
 

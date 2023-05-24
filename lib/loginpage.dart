@@ -6,17 +6,15 @@ import 'package:taswiha/toursit.dart';
 import 'auth.dart';
 import 'touristList.dart';
 import 'registerpage.dart';
-
+import 'searchPage.dart';
 
 class LoginPage extends StatelessWidget {
-  navigateToCategoryPage(BuildContext context){
-   
+  navigateToCategoryPage(BuildContext context) {}
 
-
-  }
-  bool checkUser(String u, String p){
+  bool checkUser(String u, String p) {
     return tlist.contains(Tourist(username: u, password: p));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,11 +57,12 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed:(){Navigator.of(context).push( MaterialPageRoute( 
-                                           builder: (DummyNameFilledByFlutter)
-                                                      {return CategoryGrid();}
-  						         ));
-                       },
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (DummyNameFilledByFlutter) {
+                  return CategoryGrid();
+                }));
+              },
               child: Text('Login'),
             ),
             SizedBox(height: 10),
@@ -79,10 +78,12 @@ class LoginPage extends StatelessWidget {
                       color: Colors.blue,
                     ),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = (){Navigator.of(context).push( MaterialPageRoute( 
-                                           builder: (DummyNameFilledByFlutter)
-                                                      {return RegistrationPage();}
-  						         ));} ,
+                      ..onTap = () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (DummyNameFilledByFlutter) {
+                          return RegistrationPage();
+                        }));
+                      },
                   ),
                 ],
               ),
