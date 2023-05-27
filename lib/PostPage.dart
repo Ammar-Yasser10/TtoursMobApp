@@ -179,7 +179,13 @@ import 'package:taswiha/searchPage.dart';
 import 'bottomNavbar.dart';
 import 'categorypage.dart';
 import 'userPage.dart';
+import 'package:taswiha/searchPage.dart';
+
+import 'bottomNavbar.dart';
+import 'categorypage.dart';
+import 'userPage.dart';
 // import 'package:image_picker/image_picker.dart';
+
 
 class PostPage extends StatelessWidget {
   // late File file;

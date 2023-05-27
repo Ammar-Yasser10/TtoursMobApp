@@ -162,3 +162,5 @@ class _SearchPageState extends State<SearchPage> {
         'Search performed with category: $_selectedCategory, location: $_selectedLocation');
   }
 }
+
+  

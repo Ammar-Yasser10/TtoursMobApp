@@ -9,7 +9,7 @@ import 'package:taswiha/toursit.dart';
 import 'auth.dart';
 import 'touristList.dart';
 import 'registerpage.dart';
-
+import 'searchPage.dart';
 
 class LoginPage extends StatefulWidget {
   

@@ -28,6 +28,7 @@
 // ];
 import 'post.dart';
 import 'Category.dart';
+
 var postlist = [
   Post(
     title: "nile river",

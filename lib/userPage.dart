@@ -125,3 +125,25 @@ class UserPage extends StatelessWidget {
     );
   }
 }
+
+  Widget _buildStatColumn(String title, String value) {
+    return Column(
+      children: <Widget>[
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 5.0),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16.0,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    );
+  }
