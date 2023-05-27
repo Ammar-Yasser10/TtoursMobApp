@@ -1,7 +1,4 @@
-
-
-import 'package:taswiha/toursit.dart';
-
+import 'toursit.dart';
 var tlist=[
 Tourist(username: "tamora",password: "tamer123"),
 Tourist(username: "miroo",password: "amary2020"),

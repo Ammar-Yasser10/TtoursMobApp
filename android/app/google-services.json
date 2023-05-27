@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "222026335255",
+    "firebase_url": "https://taswihatours-default-rtdb.firebaseio.com",
+    "project_id": "taswihatours",
+    "storage_bucket": "taswihatours.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222026335255:android:ac6e3c6f26b8540db1c852",
+        "android_client_info": {
+          "package_name": "com.example.taswiha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222026335255-h1lj6m6r3rnkkf98nj8reb2ojj9t7776.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnan41zRtTEEdWb0996Zf8v8bDsuSLyUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222026335255-h1lj6m6r3rnkkf98nj8reb2ojj9t7776.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

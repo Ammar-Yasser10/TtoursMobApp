@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'post.dart';
+// import 'package:flutter/material.dart';
+// import 'post.dart';
 
 class Tourist {
   // String name;
