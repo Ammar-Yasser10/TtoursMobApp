@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             'registrationroute': (dummyCtx) => RegistrationPage(),
             'MainMenu': (dummyCtx) => FeedPage(),
             'searchroute': (dummyCtx) => SearchPage(),
-            'userRoute': (dummyCtx) => UserPage(),
+            'userRoute': (dummyCtx) => UserPage(),  
             '/postplace': (dummyCtx) => PostPage()
           },
         ));

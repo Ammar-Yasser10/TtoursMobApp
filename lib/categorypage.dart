@@ -1,4 +1,6 @@
 //import 'package:elmatbakh/categoryCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:taswiha/FeedPage.dart';
 import 'package:taswiha/bottomNavbar.dart';
@@ -12,20 +14,37 @@ import 'searchPage.dart';
 
 class CategoryGrid extends StatelessWidget {
   int currentIndex = 3;
+ var catInstance= FirebaseFirestore.instance.collection("Categories").snapshots();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Choose your Category'),
       ),
-      body: GridView.count(
+       body:StreamBuilder<QuerySnapshot>(
+        stream: catInstance,
+        builder: (context, snapshot){
+          if(snapshot.connectionState == ConnectionState.waiting) 
+          { return Center(child: CircularProgressIndicator(),); }
+          var myDocuments = snapshot.data!.docs;
+          return GridView.count(
         crossAxisSpacing: 10,
         padding: const EdgeInsets.all(10),
         crossAxisCount: 2,
-        children: categoriesList.map((c) {
-          return CategoryCard(cat: c);
-        }).toList(),
-      ),
+        children:List.generate(myDocuments.length, (index){
+           final document = myDocuments[index];
+              final data = document.data() as Map;
+              var cid=data['id'];
+              final t=data['title'];
+              final img=data['imageUrl'];
+              final Category c= Category(id:cid, title:t , imageUrl:img);
+              return CategoryCard(cat: c);
+        })
+      );
+
+        },
+       ),
+      
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {

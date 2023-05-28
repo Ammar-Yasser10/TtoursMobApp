@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +28,28 @@ var authenticationMode=0;
 void loginORsignup() async {
   await Firebase.initializeApp();
   // final authenticationInstance = FirebaseAuth.instance;
+final collectionRef = FirebaseFirestore.instance.collection('Users');
+//TO GET ID BASED ON A SPECIFIC FIELD NAME
+final QuerySnapshot querySnapshot = await collectionRef.where('email', isEqualTo: 'yassin@hotmail.com').get();
+// var snapshot= await collectionRef.get();
+if(querySnapshot.docs.isNotEmpty){
+for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    final documentId = documentSnapshot.id;
+    final data = documentSnapshot.data();
+    print("USER ID IS SAVED IN:");
+    print(documentId);
+    // Access other fields within the document using data['field_name']
+    // print('Document ID: $documentId');
+    // print('Field value: ${data['field_name']}');
+  }
+}
+
+//TO GET DATA OF A RECORD WHEN GIVING THE ID 
+final documentRef = FirebaseFirestore.instance.collection('Users').doc('your_document_id');
+final snapshot= await documentRef.get();
+if(snapshot.exists){
+  print(snapshot.data());
+}
 
 var email = emailController.text.trim();
 var password = passwordController.text.trim();
