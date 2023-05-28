@@ -18,9 +18,9 @@ import 'Category.dart';
 class Post {
   String title;
   String location;
-  List cid;
+  int cid;
   String imageURL;
-  Category cat;
+  // Category cat;
   List comments;
   int likes;
   String description;
@@ -31,7 +31,7 @@ class Post {
       required this.location,
       required this.cid,
       required this.imageURL,
-      required this.cat,
+      // required this.cat,
       required this.comments,
       required this.likes,
       required this.description,
