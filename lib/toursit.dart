@@ -4,6 +4,10 @@
 class Tourist {
   // String name;
   String username;
-  String password;
-  Tourist({required this.username,required this.password});
+  String email;
+  int followers;
+  int following;
+  String bio;
+
+  Tourist({required this.username,required this.email,required this.followers,required this.bio, required this.following});
 }

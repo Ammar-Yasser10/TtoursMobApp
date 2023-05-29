@@ -1,31 +1,52 @@
 //import 'package:elmatbakh/categoryCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:taswiha/FeedPage.dart';
 import 'package:taswiha/bottomNavbar.dart';
 import 'package:taswiha/userPage.dart';
 import 'CategoryCard.dart';
-import 'catlist.dart';
 import 'Category.dart';
 import 'PostPage.dart';
 import 'loginpage.dart';
 import 'searchPage.dart';
+import 'globals.dart';
 
 class CategoryGrid extends StatelessWidget {
   int currentIndex = 3;
  var catInstance= FirebaseFirestore.instance.collection("Categories").snapshots();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      title: 'Categories',
+      routes: {
+            'categoryroute': (dummyCtx) => CategoryGrid(),
+            'MainMenu': (dummyCtx) => FeedPage(),
+            'searchroute': (dummyCtx) => SearchPage(),
+            'userRoute': (dummyCtx) => UserPage(),  
+            '/postplace': (dummyCtx) => PostPage()
+          },
+      home:Scaffold(
       appBar: AppBar(
         title: const Text('Choose your Category'),
+        actions: [IconButton(onPressed:(){
+          FirebaseAuth.instance.signOut();
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+
+        }, icon:Icon(Icons.logout), )],
       ),
        body:StreamBuilder<QuerySnapshot>(
         stream: catInstance,
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.waiting) 
           { return Center(child: CircularProgressIndicator(),); }
+          if (snapshot.data == null) {
+      return Center(child: Text('No data available'));
+    }
           var myDocuments = snapshot.data!.docs;
           return GridView.count(
         crossAxisSpacing: 10,
@@ -34,9 +55,9 @@ class CategoryGrid extends StatelessWidget {
         children:List.generate(myDocuments.length, (index){
            final document = myDocuments[index];
               final data = document.data() as Map;
-              var cid=data['id'];
-              final t=data['title'];
-              final img=data['imageUrl'];
+              var cid=data!['id'];
+              final t=data!['title'];
+              final img=data!['imageUrl'];
               final Category c= Category(id:cid, title:t , imageUrl:img);
               return CategoryCard(cat: c);
         })
@@ -82,6 +103,9 @@ class CategoryGrid extends StatelessWidget {
           }
         },
       ),
+    ),
     );
+    
+    
   }
 }

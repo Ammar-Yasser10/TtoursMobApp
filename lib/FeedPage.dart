@@ -8,7 +8,7 @@ import 'package:taswiha/userPage.dart';
 import 'PostCard.dart';
 import 'Category.dart';
 import 'bottomNavbar.dart';
-import 'postList.dart';
+import 'globals.dart';
 
 class FeedPage extends StatelessWidget {
   //Category category;
@@ -51,6 +51,7 @@ print(category!.id);
               final description=data['description'];
               final noComments=data['noComments'];
               print(cid);
+              print(myGlobalVariable);
                if(cid==category.id){
                 Post post=Post(title: uname, location: location, cid: cid, imageURL:img,comments:[''], likes: likes, description: description, noComments: noComments, noDislikes: dislikes);
                return PostCard(post: post);

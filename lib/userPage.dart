@@ -1,11 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:taswiha/globals.dart';
+import 'toursit.dart';
 import 'PostPage.dart';
 import 'bottomNavbar.dart';
 import 'categorypage.dart';
 import 'searchPage.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+  var uname='';
+  var followers=0;
+  var following=0;
+    void initState() {
+    super.initState();
+    fetchUser();
+  }
+
+  void fetchUser() async {
+    var documentRef = await FirebaseFirestore.instance.collection('Users').doc(myGlobalVariable).get();
+    var data=documentRef;
+    uname=data.data()!['username'];
+    followers=data.data()!['followers'];
+    following=data.data()!['following'];
+    if (documentRef.exists) {
+      print(documentRef.data());
+    }
+    print(uname);
+  }
   @override
   Widget build(BuildContext context) {
     int currentIndex = 4;
@@ -13,7 +40,9 @@ class UserPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Account'),
       ),
-      body: Column(
+      body:
+      
+       Column(
         children: <Widget>[
           const SizedBox(height: 20.0),
           const CircleAvatar(
@@ -21,8 +50,8 @@ class UserPage extends StatelessWidget {
             backgroundImage: AssetImage('assets/profile_image.jpg'),
           ),
           const SizedBox(height: 10.0),
-          const Text(
-            'Username',
+           Text(
+            uname,
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -40,8 +69,8 @@ class UserPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _buildStatColumn('Followers', '100'),
-              _buildStatColumn('Following', '50'),
+              _buildStatColumn('Followers', '${followers}'),
+              _buildStatColumn('Following', '${following}'),
             ],
           ),
           const SizedBox(height: 20.0),
@@ -126,24 +155,24 @@ class UserPage extends StatelessWidget {
   }
 }
 
-  Widget _buildStatColumn(String title, String value) {
-    return Column(
-      children: <Widget>[
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 5.0),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16.0,
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildStatColumn(String title, String value) {
+  //   return Column(
+  //     children: <Widget>[
+  //       Text(
+  //         value,
+  //         style: const TextStyle(
+  //           fontSize: 24.0,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //       const SizedBox(height: 5.0),
+  //       Text(
+  //         title,
+  //         style: const TextStyle(
+  //           fontSize: 16.0,
+  //           color: Colors.grey,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }

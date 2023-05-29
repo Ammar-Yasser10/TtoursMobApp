@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:taswiha/categorypage.dart';
 import 'package:taswiha/toursit.dart';
 import 'auth.dart';
-import 'touristList.dart';
 import 'registerpage.dart';
 import 'searchPage.dart';
+import 'globals.dart';
 
 class LoginPage extends StatefulWidget {
   
@@ -28,21 +28,8 @@ var authenticationMode=0;
 void loginORsignup() async {
   await Firebase.initializeApp();
   // final authenticationInstance = FirebaseAuth.instance;
-// final collectionRef = FirebaseFirestore.instance.collection('Users');
 //TO GET ID BASED ON A SPECIFIC FIELD NAME
-// final QuerySnapshot querySnapshot = await collectionRef.where('email', isEqualTo: 'yassin@hotmail.com').get();
-// var snapshot= await collectionRef.get();
-// if(querySnapshot.docs.isNotEmpty){
-// for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
-//     final documentId = documentSnapshot.id;
-//     final data = documentSnapshot.data();
-//     print("USER ID IS SAVED IN:");
-//     print(documentId);
-//     // Access other fields within the document using data['field_name']
-//     // print('Document ID: $documentId');
-//     // print('Field value: ${data['field_name']}');
-//   }
-// }
+
 
 //TO GET DATA OF A RECORD WHEN GIVING THE ID 
 // final documentRef = FirebaseFirestore.instance.collection('Users').doc('your_document_id');
@@ -81,7 +68,23 @@ authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
 email: email,
 password: password,
 );
-Navigator.of(context).pushNamed('categoryroute');}
+Navigator.of(context).pushNamed('categoryroute');
+ final collectionRef = FirebaseFirestore.instance.collection('Users');
+final QuerySnapshot querySnapshot = await collectionRef.where('email', isEqualTo:email).get();
+var snapshot= await collectionRef.get();
+if(querySnapshot.docs.isNotEmpty){
+for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    final documentId = documentSnapshot.id;
+    myGlobalVariable=documentId;
+    final data = documentSnapshot.data();
+    print("USER ID IS SAVED IN:");
+    print(documentId);
+    // Access other fields within the document using data['field_name']
+    // print('Document ID: $documentId');
+    // print('Field value: ${data['field_name']}');
+  }
+}
+}
 }
 
 
@@ -94,7 +97,8 @@ authenticationMode==0? authenticationMode=1: authenticationMode=0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+      home:Scaffold(
       appBar: AppBar(
         title: const Text('Taswiha Tours Page'),
       ),
@@ -206,6 +210,8 @@ loginORsignup();
           ],
         ),
       ),
+    )
     );
+     
   }
 }

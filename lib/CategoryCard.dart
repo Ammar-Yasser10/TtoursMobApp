@@ -97,6 +97,7 @@ import 'package:flutter/material.dart';
 import 'package:taswiha/registerpage.dart';
 import 'Category.dart';
 import 'FeedPage.dart';
+import 'globals.dart';
 
 class CategoryCard extends StatelessWidget {
   Category cat;
