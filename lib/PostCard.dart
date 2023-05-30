@@ -9,6 +9,7 @@ import 'package:taswiha/globals.dart';
 import 'Category.dart';
 import 'post.dart';
 import 'globals.dart';
+import 'ratingWidget.dart';
 //Class Category needs to be implemented ABDO
 
 class PostCard extends StatelessWidget {
@@ -245,6 +246,7 @@ class PostCard extends StatelessWidget {
                   },
                   ),
                 ]),
+                Row(children: [RatingWidget()],)
               ]),
               SingleChildScrollView(
                 padding: const EdgeInsets.all(10),

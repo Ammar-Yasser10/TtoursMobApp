@@ -218,6 +218,9 @@ switch(category){
   cid=4;
   break;
 }
+final documentRef = FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid);
+final snapshot= await documentRef.get();
+var u=snapshot.data()!['username'];
 var generate=await FirebaseFirestore.instance.collection('Posts').add({
   'cid':cid,
   'description':description ,
@@ -228,7 +231,7 @@ var generate=await FirebaseFirestore.instance.collection('Posts').add({
   'uid':FirebaseAuth.instance.currentUser!.uid,
   'timeCreated':Timestamp.now(),
   'imageUrl':base64Image,
-  'username':'yassinantar',
+  'username':u,
   'comments':[]
 
 });

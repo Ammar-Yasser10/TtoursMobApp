@@ -26,143 +26,173 @@ class PostDetails extends StatelessWidget {
     final postDislikes=post?['Post']?.noDislikes;
     final postPid=post?['Post']?.pid;
     final postComm=post?['Post']?.noComments;
+    var commentController=TextEditingController();
+   
+   
+    void addComment()async{
+      var comment=commentController.text.trim();
+var cid=0;
+final documentRef = FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid);
+final snapshot= await documentRef.get();
+var u=snapshot.data()!['username'];
+var generate=await FirebaseFirestore.instance.collection('Comments').add({
+  'text':comment,
+  'uid':FirebaseAuth.instance.currentUser!.uid,
+  'timeCreated':Timestamp.now(),
+  'pid':postPid,
+  'username':u,
+
+});
+await FirebaseFirestore.instance.collection('Posts').doc(postPid).update({
+ 'noComments':postComm + 1
+});
+String postId = generate.id; // Get the auto-generated ID of the newly created document
+
+await FirebaseFirestore.instance.collection('Posts').doc(postId).update({
+  'pid': postId,
+});
+    }
     // final postTitle = post?['Post']?.title;
     // final postTitle = post?['Post']?.title;
 
     // Build your UI using the extracted post properties
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Post Details'),
-      ),
-      body: Column(
-        children: [
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            elevation: 4,
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        border: Border.symmetric(
-                          vertical: BorderSide.none,
-                          horizontal: BorderSide(
-                            color: Color.fromARGB(255, 161, 248, 61),
-                            width: 0.5,
-                          ),
+  appBar: AppBar(
+    title: Text('Post Details'),
+  ),
+  body: SingleChildScrollView(
+    child: Column(
+      children: [
+        Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 4,
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      border: Border.symmetric(
+                        vertical: BorderSide.none,
+                        horizontal: BorderSide(
+                          color: Color.fromARGB(255, 161, 248, 61),
+                          width: 0.5,
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              postTitle!,
-                              style: const TextStyle(color: Colors.black, fontSize: 30),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                    Row(
+                    child: Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(10),
                           child: Text(
-                            postLocation!,
-                            style: const TextStyle(color: Colors.black, fontSize: 10),
+                            postTitle!,
+                            style: const TextStyle(color: Colors.black, fontSize: 30),
                             textAlign: TextAlign.start,
                           ),
                         ),
                       ],
                     ),
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          child: Builder(
-                            builder: (BuildContext context) {
-                              try {
-                                return Image.memory(
-                                  base64Decode(postImg), // Assuming post.imageURL is a Uint8List
-                                  height: 250,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                );
-                               
-                              } catch (e) {
-                                print('Error loading image: $e');
-                                 return Image.network(
-                                  postImg!,
-                                  height: 250,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    // SingleChildScrollView(
-                    //   padding: const EdgeInsets.all(10),
-                    //   child: Column(
-                    //     children: [
-                    //       Text(
-                    //         postDescription!,
-                    //         style: const TextStyle(color: Colors.black, fontSize: 20),
-                    //         textAlign: TextAlign.start,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelText: 'Comment',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        child: Text(
+                          postLocation!,
+                          style: const TextStyle(color: Colors.black, fontSize: 10),
+                          textAlign: TextAlign.start,
                         ),
                       ),
-                      onChanged: (value) {
-                        // Handle comment input
-                      },
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        child: Builder(
+                          builder: (BuildContext context) {
+                            try {
+                              return Image.memory(
+                                base64Decode(postImg), // Assuming post.imageURL is a Uint8List
+                                height: 250,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              );
+                            } catch (e) {
+                              print('Error loading image: $e');
+                              return Image.network(
+                                postImg!,
+                                height: 250,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Comment',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
-                                        StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                    stream: FirebaseFirestore.instance.collection('Posts').doc(postPid).snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var data = snapshot.data!.data();
-                      List comments = data!['comments'];
-                      return ListView.builder(
-                      shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                      itemCount: comments.length,
-                      itemBuilder: (ctx, index) {
-                        final comment = comments[index];
-                        final commentText = comment as String;
-                        return ListTile(
-                          title: Text(commentText),
-                        );
-                      },
-                      
-      );
-    } else {
-      return CircularProgressIndicator();
+                    controller: commentController,
+                    onChanged: (value) {
+                      // Handle comment input
+                    },
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      addComment();
+                    },
+                    icon: Icon(Icons.send),
+                    label: Text('Post Comment'),
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+  stream: FirebaseFirestore.instance.collection('Comments').snapshots(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
     }
-  },
-)
+    var myDocuments = snapshot.data!.docs;
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: myDocuments.length,
+      itemBuilder: (ctx, index) {
+        var document = myDocuments[index];
+        final data = document.data() as Map;
+        final text = data['text'];
+        final pid=data['pid'];
 
-                  ],
-                ),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                ]),
-              ],
-            ),
-          ),
-        ],
-      ),
+        if(pid==postPid){
+return ListTile(
+          title: Text(text),
+        );
+        }
+        else{
+          return Container();
+        }
+        
+      },
     );
+  },
+),
+                ],
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                // Additional widgets can be added here if needed
+              ]),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 }
