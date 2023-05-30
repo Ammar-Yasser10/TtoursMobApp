@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:taswiha/globals.dart';
+import 'globals.dart';
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -9,9 +10,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        currentIndex: currentIndex,
+        currentIndex: 1,
         onTap: onTap,
-        items: const [
+        items:isGuest==false? const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -37,6 +38,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: 'Profile',
             backgroundColor: Colors.blue,
           )
+        ]:const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+            backgroundColor: Colors.blue,
+          ),
         ]);
   }
 }

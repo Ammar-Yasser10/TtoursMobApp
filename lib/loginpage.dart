@@ -64,11 +64,32 @@ await FirebaseFirestore.instance
 }
 else //log in 
 {
+  try{
 authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
 email: email,
 password: password,
 );
+isGuest=false;
 Navigator.of(context).pushNamed('categoryroute');
+  }catch(e){
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Sign-In Error'),
+        content: Text('Invalid username or password.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );  }
+
  final collectionRef = FirebaseFirestore.instance.collection('Users');
 final QuerySnapshot querySnapshot = await collectionRef.where('email', isEqualTo:email).get();
 var snapshot= await collectionRef.get();
@@ -200,8 +221,10 @@ loginORsignup();
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         // Handle guest button press
-                        FirebaseAuth.instance.signOut();
-
+                        print(isGuest);
+                        isGuest=true;
+                        print(isGuest);
+                        Navigator.of(context).pushNamed('categoryroute');
                       },
                   ),
                 ],

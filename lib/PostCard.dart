@@ -1,80 +1,31 @@
-// import 'package:flutter/material.dart';
-// import 'Category.dart';
-// import 'post.dart';
-// //Class Category needs to be implemented ABDO
 
-
-// class PostCard extends StatelessWidget {
-//   // Category rec;
-// Post post;
-//   PostCard({required this.post});
-
-//   checkPostDetails(BuildContext myContext){
-//     Navigator.of(myContext).pushNamed('/PostDetailsRoute', arguments: {'Post': post});}
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: () => checkPostDetails(context),
-
-//       child: Card(
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-//         elevation: 4, 
-//         margin: EdgeInsets.all(10),
-//         child: Column(children: [
-//           Stack(children:[
-//             ClipRRect(borderRadius: BorderRadius.only(
-//               topLeft: Radius.circular(15), 
-//               topRight: Radius.circular(15)),
-//             child: Image.network(post.imageURL, //CATEGORY ATTRIBUTES
-//               height: 250,
-//               width: double.infinity,
-//               fit: BoxFit.cover,)),
-
-//             Positioned.fill(child: ClipRRect(
-//               borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(15), 
-//                 topRight: Radius.circular(15)),
-//               child: Container(
-//                 color: Colors.black38,
-//                 child: Center(child: Text(post.place, //CATEGORY ATTRIBUTES
-//                   softWrap: true,
-//                   overflow: TextOverflow.fade,
-//                   style: TextStyle(color: Colors.white, fontSize: 30),
-//                 textAlign: TextAlign.center,),),
-//               ),),),
-//           ],),
-//           Container(
-//             margin: EdgeInsets.all(15),
-//             padding: EdgeInsets.all(5),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               children:[
-//                 Row(children:[Icon(Icons.thumb_up ), Text(("${post.likes}"))]), // NO 1, Rating 
-//                  Row(children:[Icon(Icons.comment), Text(("${post.noComments}"))]), //NO 2, Comment section 
-//                 // Row(children: [Icon(Icons.verified), Text(rec.isVegetarian ? 'Vegetarian' : 'Non-Vegetarian')]) //NO 3, ???
-//               ]
-//             ))
-//           ]),
-//           ),);
-//   }
-  
-//   String getDifficulty(int difficulty) {
-//     if (difficulty == 1) return 'Easy';
-//     else if (difficulty == 2) return 'Medium';
-//     else return 'Hard';
-//   }
-// }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:taswiha/globals.dart';
 import 'Category.dart';
 import 'post.dart';
+import 'globals.dart';
 //Class Category needs to be implemented ABDO
 
 class PostCard extends StatelessWidget {
+ 
   // Category rec;
   Post post;
-  PostCard({required this.post});
+   List likedField=[];
+   List dislikedField=[];
+   bool isPostLiked=false;
+  PostCard({required this.post}){
+  if(isGuest==false){
+ var likedInstance=FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).snapshots().listen((snapshot) {
+    likedField = snapshot.data()!['likedPosts'];
+    dislikedField=snapshot.data()!['dislikedPosts'];
+    isPostLiked=likedField.contains(post.pid);
+  });
+  }
+  }
+  
 
   checkPostDetails(BuildContext myContext) {
     Navigator.of(myContext)
@@ -90,48 +41,7 @@ class PostCard extends StatelessWidget {
         elevation: 4,
         margin: const EdgeInsets.all(10),
         child: Column(children: [
-          // Stack(
-          //   children: [
-          //     ClipRRect(
-          //         child: Image.network(
-          //       post.imageURL, //CATEGORY ATTRIBUTES
-          //       height: 250,
-          //       width: double.infinity,
-          //       fit: BoxFit.cover,
-          //     )),
-          //     Positioned.fill(
-          //       child: ClipRRect(
-          //         child: Container(
-          //           color: Colors.black38,
-          //           child: Center(
-          //             child: Text(
-          //               post.title, //CATEGORY ATTRIBUTES
-          //               softWrap: true,
-          //               overflow: TextOverflow.fade,
-          //               style: TextStyle(color: Colors.white, fontSize: 30),
-          //               textAlign: TextAlign.center,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Container(
-          //     child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //         children: [
-          //           Row(children: [
-          //             Icon(Icons.thumb_up),
-          //             Text(("${post.likes}"))
-          //           ]), // NO 1, Rating
-          //           Row(children: [
-          //             Icon(Icons.comment),
-          //             Text(("${post.noComments}"))
-          //           ]), //NO 2, Comment section
-          //           // Row(children: [Icon(Icons.verified), Text(rec.isVegetarian ? 'Vegetarian' : 'Non-Vegetarian')]) //NO 3, ???
-          //         ]))
-
+        
           Column(
             children: [
               Container(
@@ -189,14 +99,58 @@ class PostCard extends StatelessWidget {
                       dotPrimaryColor: Color(0xff33b5e5),
                       dotSecondaryColor: Color(0xff0099cc),
                     ),
-                    likeBuilder: (bool isLiked) {
+                    
+                    likeCount: post.likes,
+                  onTap:(c) async {
+                      if (isGuest == true) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Sign-In Required'),
+        content: Text('You need to be signed in to interact.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+} else {
+  if (likedField.contains(post.pid)) {
+        likedField.remove(post.pid);
+    await FirebaseFirestore.instance.collection('Posts').doc(post.pid).update({
+      'likes': post.likes - 1,
+    });
+    await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'likedPosts': likedField,
+    });
+ 
+  } else {
+    likedField.add(post.pid);
+    await FirebaseFirestore.instance.collection('Posts').doc(post.pid).update({
+      'likes': post.likes + 1,
+    });
+    await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'likedPosts': likedField,
+    });
+   
+
+  }
+  
+}
+                  },
+                  likeBuilder: (bool isLiked) {
                       return Icon(
                         Icons.favorite,
-                        color: isLiked ? Colors.red : Colors.grey,
+                        color: isPostLiked ? Colors.red : Colors.grey,
                         size: 30,
                       );
                     },
-                    likeCount: post.likes,
                   ),
                 ]),
                 Row(children: [
@@ -223,6 +177,49 @@ class PostCard extends StatelessWidget {
                       );
                     },
                     likeCount: post.noDislikes,
+                    onTap:(c) async { 
+                      if (isGuest == true) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Sign-In Required'),
+        content: Text('You need to be signed in to interact.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+} else {
+  if (dislikedField.contains(post.pid)) {
+        dislikedField.remove(post.pid);
+    await FirebaseFirestore.instance.collection('Posts').doc(post.pid).update({
+      'dislikes': post.noDislikes - 1,
+    });
+    await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'dislikedPosts': dislikedField,
+    });
+ 
+  } else {
+    dislikedField.add(post.pid);
+    await FirebaseFirestore.instance.collection('Posts').doc(post.pid).update({
+      'dislikes': post.noDislikes + 1,
+    });
+    await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'dislikedPosts': dislikedField,
+    });
+   
+
+  }
+  
+}
+                  },
                   ),
                 ]),
               ]),
@@ -245,13 +242,4 @@ class PostCard extends StatelessWidget {
     );
   }
 
-  String getDifficulty(int difficulty) {
-    if (difficulty == 1) {
-      return 'Easy';
-    } else if (difficulty == 2) {
-      return 'Medium';
-    } else {
-      return 'Hard';
-    }
-  }
 }

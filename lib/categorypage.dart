@@ -30,14 +30,21 @@ class CategoryGrid extends StatelessWidget {
       home:Scaffold(
       appBar: AppBar(
         title: const Text('Choose your Category'),
-        actions: [IconButton(onPressed:(){
+        actions:[isGuest==false?IconButton(onPressed:(){
           FirebaseAuth.instance.signOut();
           Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
 
-        }, icon:Icon(Icons.logout), )],
+        }, icon:Icon(Icons.logout), ):IconButton(onPressed:(){
+          FirebaseAuth.instance.signOut();
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+
+        }, icon:Icon(Icons.login), )],
       ),
        body:StreamBuilder<QuerySnapshot>(
         stream: catInstance,
@@ -71,10 +78,10 @@ class CategoryGrid extends StatelessWidget {
         onTap: (index) {
           switch (index) {
             case 0: // Home button
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => CategoryGrid()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoryGrid()),
+              );
               break;
             case 1: // Search button
               Navigator.push(

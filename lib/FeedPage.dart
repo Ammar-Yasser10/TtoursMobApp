@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:taswiha/PostPage.dart';
@@ -50,10 +52,12 @@ print(category!.id);
               var cid=data['cid'];
               final description=data['description'];
               final noComments=data['noComments'];
+              final uid=data['uid'];
+              final pid=data['pid'];
               print(cid);
               print(myGlobalVariable);
                if(cid==category.id){
-                Post post=Post(title: uname, location: location, cid: cid, imageURL:img,comments:[''], likes: likes, description: description, noComments: noComments, noDislikes: dislikes);
+                Post post=Post(title: uname, location: location, cid: cid, imageURL:img,comments:[''], likes: likes, description: description, noComments: noComments, noDislikes: dislikes,uid: uid,pid:pid);
                return PostCard(post: post);
                 }
                 else{
