@@ -5,7 +5,39 @@ import 'bottomNavbar.dart';
 import 'categorypage.dart';
 import 'searchPage.dart';
 
+<<<<<<< Updated upstream
 class UserPage extends StatelessWidget {
+=======
+class UserPage extends StatefulWidget {
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+  var uname = '';
+  var followers = 0;
+  var following = 0;
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
+  void fetchUser() async {
+    var documentRef = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(myGlobalVariable)
+        .get();
+    var data = documentRef;
+    uname = data.data()!['username'];
+    followers = data.data()!['followers'];
+    following = data.data()!['following'];
+    if (documentRef.exists) {
+      print(documentRef.data());
+    }
+    print(uname);
+  }
+
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     int currentIndex = 4;
@@ -21,9 +53,15 @@ class UserPage extends StatelessWidget {
             backgroundImage: AssetImage('assets/profile_image.jpg'),
           ),
           const SizedBox(height: 10.0),
+<<<<<<< Updated upstream
           const Text(
             'Username',
             style: TextStyle(
+=======
+          Text(
+            uname,
+            style: const TextStyle(
+>>>>>>> Stashed changes
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
             ),

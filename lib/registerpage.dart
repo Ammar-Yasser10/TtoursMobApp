@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
+
 class RegistrationPage extends StatefulWidget {
-  
   @override
-  
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
@@ -78,11 +77,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ElevatedButton(
               child: Text('Register'),
               onPressed: () {
-                 Navigator.of(context).push( MaterialPageRoute( 
-                                           builder: (DummyNameFilledByFlutter)
-                                                      {return LoginPage();}
-  						         )
-				    );
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (DummyNameFilledByFlutter) {
+                  return LoginPage();
+                }));
                 // Perform registration logic here
                 print('Name: $_name');
                 print('Username: $_username');

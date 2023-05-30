@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'PostPage.dart';
 import 'bottomNavbar.dart';
 import 'categorypage.dart';

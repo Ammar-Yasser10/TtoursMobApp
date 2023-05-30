@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'globals.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -8,6 +10,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //int adjustedIndex = currentIndex.clamp(0, 4);
+
     return BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
@@ -36,7 +40,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             icon: Icon(Icons.account_box_rounded),
             label: 'Profile',
             backgroundColor: Colors.blue,
-          )
+          ),
         ]);
   }
 }

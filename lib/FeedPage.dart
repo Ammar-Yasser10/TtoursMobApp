@@ -9,32 +9,87 @@ import 'bottomNavbar.dart';
 import 'postList.dart';
 
 class FeedPage extends StatelessWidget {
-  //Category category;
-  //KitchenScreen({required this.category});
-
-  //Implementation of this page needs to be changed to fit the database
   int currentIndex = 0;
+<<<<<<< Updated upstream
+=======
+  var postInstance = FirebaseFirestore.instance.collection('Posts').snapshots();
+>>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context)!.settings.arguments as Map<String, Category>;
+<<<<<<< Updated upstream
     final category = routeArgs['category'];
 
     final postsInThatCategory = postlist.where((element) {
       //needs to be implemeetd in the post class or database
       return element.cid.contains(category!.id);
     }).toList();
+=======
+    var category = routeArgs['category'];
+    print(category!.id);
+    // final postsInThatCategory = postlist.where((element) {
+    //   //needs to be implemeetd in the post class or database
+    //   // return element.cid.contains(category!.id);
+    // }).toList();
+>>>>>>> Stashed changes
 
     return Scaffold(
       appBar: AppBar(
         title: Text(category!.title),
       ),
+<<<<<<< Updated upstream
       body: ListView.builder(
         itemBuilder: (ctx, index) {
           return PostCard(post: postsInThatCategory[index]);
         },
         itemCount: postsInThatCategory.length,
         scrollDirection: Axis.vertical,
+=======
+      body: StreamBuilder<QuerySnapshot>(
+        stream: postInstance,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          var myDocuments = snapshot.data!.docs;
+          return ListView.builder(
+            itemBuilder: (ctx, index) {
+              var document = myDocuments[index];
+              final data = document.data() as Map;
+              final uname = data['username'];
+              final location = data['location'];
+              final img = data['imageUrl'];
+              final likes = data['likes'];
+              final dislikes = data['dislikes'];
+              var cid = data['cid'];
+              final description = data['description'];
+              final noComments = data['noComments'];
+              print(cid);
+              print(myGlobalVariable);
+              if (cid == category.id) {
+                Post post = Post(
+                    title: uname,
+                    location: location,
+                    cid: cid,
+                    imageURL: img,
+                    comments: [''],
+                    likes: likes,
+                    description: description,
+                    noComments: noComments,
+                    noDislikes: dislikes);
+                return PostCard(post: post);
+              } else {
+                return Container();
+              }
+            },
+            itemCount: myDocuments.length,
+            scrollDirection: Axis.vertical,
+          );
+        },
+>>>>>>> Stashed changes
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,

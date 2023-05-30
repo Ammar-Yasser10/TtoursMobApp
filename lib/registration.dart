@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
-  
   @override
-  
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 

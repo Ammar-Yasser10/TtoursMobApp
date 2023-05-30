@@ -10,9 +10,17 @@ import 'FeedPage.dart';
 import 'PostPage.dart';
 import 'searchPage.dart';
 import 'userPage.dart';
+<<<<<<< Updated upstream
 
 void main() {
   runApp(const MyApp());
+=======
+import 'PostDetails.dart';
+
+Future<void> main() async {
+  runApp(const MyApp());
+  await Firebase.initializeApp();
+>>>>>>> Stashed changes
 }
 
 class MyApp extends StatelessWidget {
@@ -37,7 +45,12 @@ class MyApp extends StatelessWidget {
             'MainMenu': (dummyCtx) => FeedPage(),
             'searchroute': (dummyCtx) => SearchPage(),
             'userRoute': (dummyCtx) => UserPage(),
+<<<<<<< Updated upstream
             '/postplace': (dummyCtx) => PostPage()
+=======
+            '/postplace': (dummyCtx) => PostPage(),
+            '/PostDetailsRoute': (dummyCtx) => PostDetails()
+>>>>>>> Stashed changes
           },
         ));
   }
