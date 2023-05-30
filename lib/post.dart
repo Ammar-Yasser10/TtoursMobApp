@@ -19,7 +19,7 @@ class Post {
   String title;
   String location;
   int cid;
-  String imageURL;
+  var imageURL;
   // Category cat;
   List comments;
   int likes;

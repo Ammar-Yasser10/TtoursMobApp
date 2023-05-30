@@ -8,6 +8,7 @@ import 'package:taswiha/bottomNavbar.dart';
 import 'package:taswiha/userPage.dart';
 import 'CategoryCard.dart';
 import 'Category.dart';
+import 'PostDetails.dart';
 import 'PostPage.dart';
 import 'loginpage.dart';
 import 'searchPage.dart';
@@ -25,7 +26,9 @@ class CategoryGrid extends StatelessWidget {
             'MainMenu': (dummyCtx) => FeedPage(),
             'searchroute': (dummyCtx) => SearchPage(),
             'userRoute': (dummyCtx) => UserPage(),  
-            '/postplace': (dummyCtx) => PostPage()
+            '/postplace': (dummyCtx) => PostPage(),
+            '/PostDetailsRoute':(dummyCtx) => PostDetails()
+
           },
       home:Scaffold(
       appBar: AppBar(

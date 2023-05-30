@@ -60,7 +60,11 @@ await FirebaseFirestore.instance
 .doc(authResult.user!.uid)
 .set({
 'username': username,
-'email': email,});
+'email': email,
+'followers':0,
+'following':0,
+'likedPosts':[],
+'dislikedPosts':[]});
 }
 else //log in 
 {

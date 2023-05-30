@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,10 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => checkPostDetails(context),
+      onTap: () => {
+        Navigator.of(context)
+          .pushNamed('/PostDetailsRoute', arguments: {'Post': post}),
+      },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 4,
@@ -80,13 +85,31 @@ class PostCard extends StatelessWidget {
               ),
               Stack(
                 children: [
-                  ClipRRect(
-                      child: Image.network(
-                    post.imageURL, //CATEGORY ATTRIBUTES
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )),
+                 ClipRRect(
+  child: Container(
+    child: Builder(
+      builder: (BuildContext context) {
+        try {
+          return Image.memory(
+            base64Decode(post.imageURL), // Assuming post.imageURL is a Uint8List
+            height: 250,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          );
+          
+        } catch (e) {
+          print('Error loading image: $e');
+          return Image.network(
+            post.imageURL,
+            height: 250,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          );
+        }
+      },
+    ),
+  ),
+)
                 ],
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [

@@ -100,9 +100,40 @@ var userInstance=FirebaseFirestore.instance.collection('Users').doc(myGlobalVari
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {
-          // ... (your existing code)
+          switch (index) {
+            case 0: // Home button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoryGrid()),
+              );
+              break;
+            case 1: // Search button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchPage()),
+              );
+              break;
+            case 2: // Publish button
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => PostPage()),
+              // );
+              break;
+            case 3: // Categories button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoryGrid()),
+              );
+              break;
+            case 4: // User button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserPage()),
+              );
+              break;
+          }
         },
-      ),
+      )
     );
   }
 

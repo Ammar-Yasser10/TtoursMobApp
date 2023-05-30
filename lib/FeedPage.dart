@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -35,42 +37,53 @@ print(category!.id);
         title: Text(category!.title),
       ),
        body:StreamBuilder<QuerySnapshot>(
-        stream: postInstance,
-        builder: (context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting) 
-          { return Center(child: CircularProgressIndicator(),); }
-          var myDocuments = snapshot.data!.docs;
-       return ListView.builder(
-        itemBuilder: (ctx, index) {
-          var document = myDocuments[index];
-              final data = document.data() as Map;
-              final uname=data['username'];
-              final location=data['location'];
-              final img=data['imageUrl'];
-              final likes=data['likes'];
-              final dislikes=data['dislikes'];
-              var cid=data['cid'];
-              final description=data['description'];
-              final noComments=data['noComments'];
-              final uid=data['uid'];
-              final pid=data['pid'];
-              print(cid);
-              print(myGlobalVariable);
-               if(cid==category.id){
-                Post post=Post(title: uname, location: location, cid: cid, imageURL:img,comments:[''], likes: likes, description: description, noComments: noComments, noDislikes: dislikes,uid: uid,pid:pid);
-               return PostCard(post: post);
-                }
-                else{
-                  return Container();
-                }
-              
-                      },
-        itemCount: myDocuments.length,
-        scrollDirection: Axis.vertical,
-      ) ;
-
-        },
-       ), 
+  stream: postInstance,
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
+    }
+    var myDocuments = snapshot.data!.docs;
+    return ListView.builder(
+      itemBuilder: (ctx, index) {
+        Post post;
+        var document = myDocuments[index];
+        final data = document.data() as Map;
+        final uname = data['username'];
+        final location = data['location'];
+        var imgBase64 = data['imageUrl'];
+        final likes = data['likes'];
+        final dislikes = data['dislikes'];
+        var cid = data['cid'];
+        final description = data['description'];
+        final noComments = data['noComments'];
+        final uid = data['uid'];
+        final pid = data['pid'];
+        print(cid);
+        print(myGlobalVariable);
+        if (cid == category.id) {
+        post = Post(
+            title: uname,
+            location: location,
+            cid: cid,
+            imageURL: imgBase64,
+            comments: [''],
+            likes: likes,
+            description: description,
+            noComments: noComments,
+            noDislikes: dislikes,
+            uid: uid,
+            pid: pid,
+          );
+          return PostCard(post: post);
+        } else {
+          return Container();
+        }
+      },
+      itemCount: myDocuments.length,
+      scrollDirection: Axis.vertical,
+    );
+  },
+), 
       
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: currentIndex,
