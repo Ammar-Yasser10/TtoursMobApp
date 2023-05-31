@@ -58,6 +58,7 @@ print(category!.id);
         final noComments = data['noComments'];
         final uid = data['uid'];
         final pid = data['pid'];
+        final rating=data['rating'];
         print(cid);
         print(myGlobalVariable);
         if (cid == category.id) {
@@ -73,6 +74,7 @@ print(category!.id);
             noDislikes: dislikes,
             uid: uid,
             pid: pid,
+            rating: rating
           );
           return PostCard(post: post);
         } else {

@@ -181,6 +181,7 @@ class PostCard extends StatelessWidget {
                   const Icon(
                     Icons.comment,
                     color: Colors.grey,
+                    size: 30,
                   ),
                   Text(("${post.noComments}"))
                 ]),
@@ -246,7 +247,16 @@ class PostCard extends StatelessWidget {
                   },
                   ),
                 ]),
-                Row(children: [RatingWidget()],)
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star_outlined,
+                      color: Colors.amber,
+                      size: 30,
+                    ),
+                    Text(("${post.rating}"))
+                  ],
+                )
               ]),
               SingleChildScrollView(
                 padding: const EdgeInsets.all(10),

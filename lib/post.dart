@@ -28,6 +28,7 @@ class Post {
   int noDislikes;
   String pid;
   String uid;
+  int rating;
   Post(
       {required this.title,
       required this.location,
@@ -40,7 +41,8 @@ class Post {
       required this.noComments,
       required this.noDislikes,
       required this.pid,
-      required this.uid});
+      required this.uid,
+      required this.rating});
 
   get categoryID => null;
 }

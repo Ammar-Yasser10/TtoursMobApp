@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:taswiha/globals.dart';
+import 'package:taswiha/post.dart';
+import 'PostCard.dart';
 import 'toursit.dart';
 import 'PostPage.dart';
 import 'bottomNavbar.dart';
@@ -72,22 +75,61 @@ var userInstance=FirebaseFirestore.instance.collection('Users').doc(myGlobalVari
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 3,
-                    children: List.generate(9, (index) {
-                      return Container(
-                        margin: const EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/post_image_$index.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }),
+              Expanded(
+                    child:StreamBuilder<QuerySnapshot>(
+  stream: FirebaseFirestore.instance.collection('Posts').snapshots(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
+    }
+    var myDocuments = snapshot.data!.docs;
+    return ListView.builder(
+      itemBuilder: (ctx, index) {
+        Post post;
+        var document = myDocuments[index];
+        final data = document.data() as Map;
+        final uname = data['username'];
+        final location = data['location'];
+        var imgBase64 = data['imageUrl'];
+        final likes = data['likes'];
+        final dislikes = data['dislikes'];
+        var cid = data['cid'];
+        final description = data['description'];
+        final noComments = data['noComments'];
+        final uid = data['uid'];
+        final pid = data['pid'];
+        final rating=data['rating'];
+        print(cid);
+        print(myGlobalVariable);
+        if (uid == FirebaseAuth.instance.currentUser!.uid) {
+        post = Post(
+            title: uname,
+            location: location,
+            cid: cid,
+            imageURL: imgBase64,
+            comments: [''],
+            likes: likes,
+            description: description,
+            noComments: noComments,
+            noDislikes: dislikes,
+            uid: uid,
+            pid: pid,
+            rating: rating
+          );
+          return PostCard(post: post);
+        } else {
+          return Container();
+        }
+      },
+      itemCount: myDocuments.length,
+      scrollDirection: Axis.vertical,
+    );
+  },
+),
+
+                    
+                
                   ),
-                ),
               ],
             );
           } else if (snapshot.hasError) {

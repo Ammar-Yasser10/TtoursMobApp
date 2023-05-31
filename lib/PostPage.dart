@@ -177,6 +177,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:taswiha/ratingWidget.dart';
 import 'package:taswiha/searchPage.dart';
 import 'bottomNavbar.dart';
 import 'categorypage.dart';
@@ -394,15 +395,15 @@ Future<void> handleImageCapture() async {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: const EdgeInsets.all(14),
+            Container(
+                margin: const EdgeInsets.all(10),
                 child: TextFormField(
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: 'Title',
-                    icon: Icon(Icons.account_circle_outlined),
+                    labelText: 'Location',
+                    icon: Icon(Icons.pin_drop_rounded),
                   ),
-                  controller: titleController,
+                  controller: locationController,
                 ),
               ),
               Container(
@@ -421,34 +422,24 @@ Future<void> handleImageCapture() async {
                 child: TextFormField(
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: 'Location',
-                    icon: Icon(Icons.pin_drop_rounded),
-                  ),
-                  controller: locationController,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
                     labelText: 'Category',
                     icon: Icon(Icons.view_compact_rounded),
                   ),
                   controller: categoryController,
                 ),
               ),
-               ElevatedButton(
-                onPressed:()async{
- addPost();
-print(base64Image);
-Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CategoryGrid()),
-              );
-
+              Container(
+                  margin: const EdgeInsets.all(10), child: RatingWidget()),
+              ElevatedButton(
+                onPressed: () async {
+                  addPost();
+                  print(base64Image);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CategoryGrid()),
+                  );
                 },
-                child: Text('Publish'),
+                child: Text('Post'),
               ),
             ],
           ),
