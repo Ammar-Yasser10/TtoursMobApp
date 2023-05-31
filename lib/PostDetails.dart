@@ -152,7 +152,7 @@ await FirebaseFirestore.instance.collection('Posts').doc(postId).update({
                     label: Text('Post Comment'),
                   ),
                   StreamBuilder<QuerySnapshot>(
-  stream: FirebaseFirestore.instance.collection('Comments').snapshots(),
+  stream: FirebaseFirestore.instance.collection('Comments').orderBy('timeCreated', descending: true).snapshots(),
   builder: (context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return Center(child: CircularProgressIndicator());
@@ -167,10 +167,10 @@ await FirebaseFirestore.instance.collection('Posts').doc(postId).update({
         final data = document.data() as Map;
         final text = data['text'];
         final pid=data['pid'];
-
+        final uname=data['username'];
         if(pid==postPid){
 return ListTile(
-          title: Text(text),
+          title: Text('${uname}:${text}'),
         );
         }
         else{

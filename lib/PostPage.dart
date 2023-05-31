@@ -1,176 +1,4 @@
-//  import 'dart:html';
 
-// import 'package:flutter/material.dart';
-
-//  class PostPage extends StatelessWidget {
-//   late File file;
-
-//   handleImageCapture(context) async {
-//     Navigator.pop(context);
-//     // XFile? file = await ImagePicker().pickImage(source: ImageSource.camera);
-//   }
-
-//   handleChooseImage(context) async {
-//     Navigator.pop(context);
-//     // XFile? file = await ImagePicker().pickImage(source: ImageSource.gallery);
-//   }
-
-//   selectImage(parentcontext) {
-//     return showDialog(
-//         context: parentcontext,
-//         builder: (context) {
-//           return SimpleDialog(
-//             title: const Text('create post'),
-//             children: [
-//               SimpleDialogOption(
-//                 child: const Text('capture photo'),
-//                 onPressed: () => handleImageCapture,
-//               ),
-//               SimpleDialogOption(
-//                 child: const Text('choose from gallery'),
-//                 onPressed: () => handleChooseImage,
-//               ),
-//               SimpleDialogOption(
-//                 child: const Text('cancel'),
-//                 onPressed: () => Navigator.pop(context),
-//               )
-//             ],
-//           );
-//         });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double cardheightwidth = 120.0;
-//     double iconsize = 60.0;
-
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           backgroundColor: Colors.cyan,
-//           leading: IconButton(
-//             icon: const Icon(Icons.arrow_back, color: Colors.white),
-//             onPressed: () => null,
-//           ),
-//           title: const Text("Create post"),
-//           centerTitle: true,
-//         ),
-//         body: Column(
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 Column(
-//                   children: [
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         GestureDetector(
-//                           onTap: () => selectImage(context),
-//                           child: SizedBox(
-//                             height: cardheightwidth,
-//                             width: cardheightwidth,
-//                             child: Card(
-//                               shape: RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.circular(10)),
-//                               elevation: 20,
-//                               child: Center(
-//                                 child: Icon(
-//                                   Icons.image_outlined,
-//                                   size: iconsize,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                         GestureDetector(
-//                           onTap: () => selectImage(context),
-//                           child: SizedBox(
-//                             height: cardheightwidth,
-//                             width: cardheightwidth,
-//                             child: Card(
-//                               shape: RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.circular(10)),
-//                               elevation: 20,
-//                               child: Center(
-//                                 child: Icon(
-//                                   Icons.image_outlined,
-//                                   size: iconsize,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                         GestureDetector(
-//                           onTap: () => selectImage(context),
-//                           child: SizedBox(
-//                             height: cardheightwidth,
-//                             width: cardheightwidth,
-//                             child: Card(
-//                               shape: RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.circular(10)),
-//                               elevation: 20,
-//                               child: Center(
-//                                 child: Icon(
-//                                   Icons.image_outlined,
-//                                   size: iconsize,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             Column(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Container(
-//                   margin: const EdgeInsets.all(14),
-//                   child: TextFormField(
-//                     decoration: const InputDecoration(
-//                       border: UnderlineInputBorder(),
-//                       labelText: 'Title',
-//                       icon: Icon(Icons.account_circle_outlined),
-//                     ),
-//                   ),
-//                 ),
-//                 Container(
-//                   margin: const EdgeInsets.all(10),
-//                   child: TextFormField(
-//                     decoration: const InputDecoration(
-//                       border: UnderlineInputBorder(),
-//                       labelText: 'Description',
-//                       icon: Icon(Icons.text_format_rounded),
-//                     ),
-//                   ),
-//                 ),
-//                 Container(
-//                   margin: const EdgeInsets.all(10),
-//                   child: TextFormField(
-//                     decoration: const InputDecoration(
-//                       border: UnderlineInputBorder(),
-//                       labelText: 'Location',
-//                       icon: Icon(Icons.pin_drop_rounded),
-//                     ),
-//                   ),
-//                 ),
-//                 const ElevatedButton(
-//                   onPressed: null,
-//                   child: Text('Use Current Location'),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//  import 'dart:html';
 import 'dart:convert';
 import 'dart:io';
 
@@ -181,6 +9,7 @@ import 'package:taswiha/ratingWidget.dart';
 import 'package:taswiha/searchPage.dart';
 import 'bottomNavbar.dart';
 import 'categorypage.dart';
+import 'globals.dart';
 import 'userPage.dart';
 import 'package:taswiha/searchPage.dart';
 import 'package:geolocator/geolocator.dart';
@@ -199,12 +28,40 @@ class _PostPage extends State<PostPage> {
   var locationController=TextEditingController();
   var descriptionController=TextEditingController();
   var categoryController=TextEditingController();
+
+  void setRating(int rating) {
+    setState(() {
+      selectedRating = rating;
+    });
+  }
+   void showSignInDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sign-In Required'),
+          content: const Text('You need to be signed in to interact.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> addPost() async {
 var title = titleController.text.trim();
 var location = locationController.text.trim();
 var description = descriptionController.text.trim();
 var category=categoryController.text.trim();
+var rating=selectedRating;
 var cid=0;
+
 switch(category){
   case 'hotels':
   cid=1;
@@ -233,7 +90,8 @@ var generate=await FirebaseFirestore.instance.collection('Posts').add({
   'timeCreated':Timestamp.now(),
   'imageUrl':base64Image,
   'username':u,
-  'comments':[]
+  'comments':[],
+  'rating':rating
 
 });
 String postId = generate.id; // Get the auto-generated ID of the newly created document
@@ -246,6 +104,9 @@ await FirebaseFirestore.instance.collection('Posts').doc(postId).update({
   XFile? imageFile;
 XFile? capturedImage;
 var base64Image;
+  int selectedRating = 0;
+
+
   Future<void> _getLocation() async {
     try {
       Position position = await getCurrentLocation();
@@ -429,7 +290,41 @@ Future<void> handleImageCapture() async {
                 ),
               ),
               Container(
-                  margin: const EdgeInsets.all(10), child: RatingWidget()),
+                  margin: const EdgeInsets.all(10), child:Row(
+      children: [
+        PopupMenuButton<int>(
+          itemBuilder: (context) => List<PopupMenuEntry<int>>.generate(
+            5,
+            (index) => PopupMenuItem<int>(
+              value: index + 1,
+              child: ListTile(
+                leading: Icon(
+                  Icons.star,
+                  color:
+                      selectedRating >= index + 1 ? Colors.amber : Colors.grey,
+                ),
+                title: Text('${index + 1}'),
+              ),
+            ),
+          ),
+          child: IconButton(
+            onPressed: isGuest ? showSignInDialog : null,
+            icon: Icon(
+              Icons.star,
+              color: selectedRating > 0 ? Colors.amber : Colors.grey,
+            ),
+          ),
+          onSelected: (value) {
+            if (!isGuest) {
+              setRating(value);
+            } else {
+              showSignInDialog();
+            }
+          },
+        ),
+        Text(selectedRating > 0 ? 'Chosen rate: $selectedRating' : 'Rating'),
+      ],
+    )),
               ElevatedButton(
                 onPressed: () async {
                   addPost();
